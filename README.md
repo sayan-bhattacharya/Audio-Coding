@@ -1,63 +1,102 @@
-Certainly! Here's a summary you can add to the README file for your repository:
+# Advanced Audio Coding & Psychoacoustic DSP Seminars
+
+<div align="center">
+
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![DSP](https://img.shields.io/badge/Domain-Digital_Signal_Processing-15803d?style=for-the-badge)]()
+[![University](https://img.shields.io/badge/TU_Ilmenau-Advanced_Audio_Coding-c026d3?style=for-the-badge)](https://www.tu-ilmenau.de/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+
+**Technische Universität Ilmenau • Department of Electrical Engineering & Information Technology**  
+*Graduate Course: Advanced Audio Coding (AAC / MP3 Signal Processing Architecture)*
+
+</div>
 
 ---
 
-# Audio Coding Seminar Repository
+## 📌 Overview
 
-## Overview
+This repository contains the algorithmic implementations, mathematical derivations, and DSP pipelines developed across the four graduate seminars of the **Advanced Audio Coding** curriculum at TU Ilmenau (the historic birthplace of MP3 audio coding).
 
-This repository contains the problems, codes, and solutions developed as part of the Audio Coding seminars for the Audio Coding course offered by the University. The work was carried out by a group of four students, each contributing to different parts of the overall problem.
-
-## Contents
-
-The repository is organized into several key sections, each focusing on different aspects of advanced Digital Signal Processing (DSP) algorithms:
-
-1. **Quantization**: Implementation and analysis of various quantization techniques used in audio coding.
-2. **Sampling**: Exploration of sampling methods and their impact on audio quality and data compression.
-3. **Filter Banks**: Design, implementation, and evaluation of filter banks for efficient audio signal processing.
-
-## Group Contributions
-
-- **Member 1**: Focused on the implementation and optimization of quantization algorithms.
-- **Member 2**: Worked on sampling techniques and their practical applications in audio coding.
-- **Member 3**: Designed and evaluated filter banks, ensuring efficient signal processing.
-- **Member 4**: Integrated the various components and performed comprehensive testing and validation.
-
-## Getting Started
-
-To get started with the code and solutions provided in this repository, follow the instructions below:
-
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/your-username/audio-coding-seminar.git
-    ```
-2. Navigate to the project directory:
-    ```bash
-    cd audio-coding-seminar
-    ```
-3. Follow the instructions in the respective directories to run the code and view the solutions.
-
-## Prerequisites
-
-Ensure you have the following software and libraries installed:
-
-- Python 3.x
-- NumPy
-- SciPy
-- Matplotlib
-
-## Usage
-
-Each section contains a README file with detailed instructions on how to run the code and understand the solutions. Refer to these files for specific guidance.
-
-## Contributions
-
-We welcome contributions and suggestions. If you find any issues or have ideas for improvements, please open an issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+The work implements the end-to-end perceptual audio codec architecture: from time-frequency filter banks and Modified Discrete Cosine Transform (MDCT) to psychoacoustic masking models, non-uniform quantization, and bit allocation.
 
 ---
 
-Feel free to customize this summary to better fit the specifics of your project and group contributions.
+## 🎧 Perceptual Audio Codec Pipeline
+
+```mermaid
+graph LR
+    classDef input fill:#eff6ff,stroke:#1e40af,stroke-width:2px;
+    classDef filter fill:#f0fdf4,stroke:#15803d,stroke-width:2px;
+    classDef psycho fill:#fefce8,stroke:#a16207,stroke-width:2px;
+    classDef quant fill:#fdf2f8,stroke:#be185d,stroke-width:2px;
+
+    PCM[Input PCM Audio<br/>44.1 kHz, 16-bit] --> FB[Polyphase Filter Bank /<br/>MDCT 50% Overlap]
+    PCM --> PAM[Psychoacoustic Model<br/>ISO/IEC 11172-3]
+    
+    PAM --> SMR[Signal-to-Mask Ratio<br/>& Masking Thresholds]
+    FB --> MDCT_COEFF[Spectral Frequency<br/>MDCT Coefficients]
+    
+    SMR & MDCT_COEFF --> QBA[Dynamic Bit Allocation &<br/>Non-Uniform Quantization]
+    QBA --> BITSTREAM[Lossless Bitstream Packing<br/>Huffman / Entropy Encoding]
+
+    class PCM input;
+    class FB,MDCT_COEFF filter;
+    class PAM,SMR psycho;
+    class QBA,BITSTREAM quant;
+```
+
+---
+
+## 📚 Seminar Curriculum Breakdown
+
+### 🔬 Seminar 1: Quantization & Companding
+- **Uniform vs. Non-Uniform Quantizers**: Implementation of mid-tread and mid-riser uniform quantizers.
+- **Companding Laws ($\mu$-law / A-law)**: Logarithmic compression of high-dynamic range signals for telecommunications.
+- **Signal-to-Quantization-Noise Ratio (SQNR)**: Empirical SQNR validation against theoretical limits ($6.02B + 1.76$ dB).
+
+### 📡 Seminar 2: Sampling & Signal Reconstruction
+- **Nyquist-Shannon Theorem**: Critical sampling, spectrum replication, and anti-aliasing filter design.
+- **Interpolation & Decimation**: Multirate signal processing, polyphase decomposition, and spectral foldover elimination.
+
+### 🎛️ Seminar 3: Filter Banks & Subband Coding
+- **Quadrature Mirror Filters (QMF)**: Polyphase analysis and synthesis filter bank pairs.
+- **Alias Cancellation**: Achieving Perfect Reconstruction (PR) under orthogonal and pseudo-QMF constraints.
+- Code: [`Main.py`](audio-coding-seminars-master/Seminar%203/Main.py), [`functions.py`](audio-coding-seminars-master/Seminar%203/functions.py).
+
+### 🎼 Seminar 4: MDCT & Psychoacoustic Masking
+- **Modified Discrete Cosine Transform (MDCT)**: Overlapped block transform with 50% overlap.
+- **Time-Domain Aliasing Cancellation (TDAC)**: Sine window and Kaiser-Bessel Derived (KBD) windows for critical subsampling.
+- **Auditory Masking**: Simultaneous masking (tone-masking-noise and noise-masking-tone) and temporal masking.
+- Code: [`MDCT.py`](audio-coding-seminars-master/Seminar%204%20/MDCT.py).
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scriptsctivate
+pip install numpy scipy matplotlib
+```
+
+### Running Seminar 3 (Filter Banks):
+```bash
+cd "audio-coding-seminars-master/Seminar 3"
+python Main.py
+```
+
+### Running Seminar 4 (MDCT & TDAC Analysis):
+```bash
+cd "audio-coding-seminars-master/Seminar 4 "
+python MDCT.py
+```
+
+---
+
+## 📬 Contact
+
+- **Author**: Sayan Bhattacharya
+- **Email**: [sayanpm17@gmail.com](mailto:sayanpm17@gmail.com)
+- **LinkedIn**: [linkedin.com/in/snbhattacharya5](https://www.linkedin.com/in/snbhattacharya5/)
